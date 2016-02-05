@@ -22,17 +22,22 @@ System.register(['angular2/core', './errors.service'], function(exports_1) {
             ErrorsComponent = (function () {
                 function ErrorsComponent(_errorsService) {
                     this._errorsService = _errorsService;
+                    this.fatal = false;
                 }
                 ErrorsComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._errorsService.onUpdate = function (errors) {
                         _this.errors = errors;
+                        _this.fatal = false;
+                    };
+                    this._errorsService.onError = function (errors) {
+                        _this.fatal = true;
                     };
                 };
                 ErrorsComponent = __decorate([
                     core_1.Component({
                         selector: 'errors',
-                        template: "\n              <h4 *ngIf=\"_errorsService.compiling\">Compiling..</h4>\n              <div *ngIf=\"errors\">\n                <div *ngFor=\"#error of errors\" class=\"alert alert-danger\" role=\"alert\">{{error}}</div>\n              </div>\n              "
+                        template: "\n              <h4 *ngIf=\"_errorsService.compiling\">Compiling..</h4>\n              <h4 *ngIf=\"fatal\">Error <-> Server: Try again..</h4>\n              <div *ngIf=\"errors\">\n                <div *ngFor=\"#error of errors\" class=\"alert alert-danger\" role=\"alert\">{{error}}</div>\n              </div>\n              "
                     }), 
                     __metadata('design:paramtypes', [errors_service_1.ErrorsService])
                 ], ErrorsComponent);

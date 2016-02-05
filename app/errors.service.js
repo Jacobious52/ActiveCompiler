@@ -33,13 +33,25 @@ System.register(['angular2/core'], function(exports_1) {
                         if (req.readyState == 4 && req.status == 200) {
                             var resp = JSON.parse(req.responseText);
                             that.errors = resp['errors'];
+                            console.log(that.errors);
                             that.compiling = false;
+                            console.info('request received');
                             if (that.onUpdate) {
                                 that.onUpdate(that.errors);
                             }
                             else {
-                                console.error('update: ErrorUpdateCallback');
+                                console.error('update: no ErrorUpdateCallback for onUpdate');
                             }
+                        }
+                    };
+                    req.onerror = function () {
+                        that.compiling = false;
+                        console.error('something went wrong with request to server :(');
+                        if (that.onError) {
+                            that.onError([req.statusText]);
+                        }
+                        else {
+                            console.error('update: no ErrorUpdateCallback for onError');
                         }
                     };
                     req.send(body);

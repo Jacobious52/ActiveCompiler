@@ -30,8 +30,20 @@ System.register(['angular2/core', './code.component', './errors.component', './c
         execute: function() {
             AppComponent = (function () {
                 function AppComponent() {
-                    this.user = "axxxxxx";
+                    this.user = '';
+                    this.validUser = false;
+                    this.regex = /a\d{7}/;
                 }
+                AppComponent.prototype.logout = function () {
+                    // log student leaving
+                    this.user = '';
+                    this.validUser = false;
+                    location.reload();
+                };
+                AppComponent.prototype.checkValid = function () {
+                    this.validUser = this.regex.test(this.user);
+                    // if true student logged in.. log that
+                };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'app',

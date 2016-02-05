@@ -11,5 +11,23 @@ import {ErrorsService} from './errors.service';
     providers: [CodeFileService, ErrorsService]
 })
 export class AppComponent {
-  public user : string = "axxxxxx";
+  public user : string = '';
+  public validUser: boolean = false;
+
+  private regex = /a\d{7}/;
+
+  logout() {
+      // log student leaving
+
+      this.user = '';
+      this.validUser = false;
+
+      location.reload();
+  }
+
+  checkValid() {
+      this.validUser = this.regex.test(this.user)
+
+      // if true student logged in.. log that
+  }
 }

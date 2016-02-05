@@ -1,9 +1,11 @@
 
 <div class="page-header" style="margin-left: 30px;">
   <h3>Active Compiler</h3>
-  <h6>{{user}}</h6>
+  <b *ngIf="!validUser">Please enter your student ID to continue</b>
+  <button *ngIf="validUser" type="button" class="btn btn-default btn-sm" (click)="logout()">Logout</button>
+  <input [disabled]="validUser" type="text" class="form-control" maxlength="8" [(ngModel)]="user" (keyup)="checkValid()" placeholder="axxxxxx"/>
 </div>
-<div *ngIf="user" class="container-fluid">
+<div *ngIf="user && validUser" class="container-fluid">
   <div class="row">
     <div class="col-md-6">
       <div class="panel panel-primary">
@@ -11,7 +13,7 @@
           <h3 class="panel-title">Code</h3>
         </div>
         <div class="panel-body">
-          <code>Loading...</code>
+          <code></code>
         </div>
       </div>
     </div>
@@ -21,7 +23,7 @@
           <h3 class="panel-title">Compile Errors</h3>
         </div>
         <div class="panel-body">
-          <errors>Loading...</errors>
+          <errors></errors>
         </div>
       </div>
     </div>

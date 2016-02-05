@@ -9,6 +9,7 @@ export class ErrorsService {
     public compiling: boolean = false;
 
     public onUpdate: ErrorUpdateCallback;
+    public onError: ErrorUpdateCallback;
 
     fetchErrors(files: CodeFile[]) {
         var url = 'http://localhost:5000/build/id/a1687803';
@@ -24,12 +25,28 @@ export class ErrorsService {
             if (req.readyState == 4 && req.status == 200) {
                 var resp: { string: string[] } = JSON.parse(req.responseText);
                 that.errors = resp['errors'];
+
+                console.log(that.errors)
+
                 that.compiling = false;
+
+                console.info('request received');
+
                 if (that.onUpdate) {
                     that.onUpdate(that.errors);
                 } else {
-                    console.error('update: ErrorUpdateCallback');
+                    console.error('update: no ErrorUpdateCallback for onUpdate');
                 }
+            }
+        }
+        req.onerror = function() {
+            that.compiling = false;
+            console.error('something went wrong with request to server :(');
+
+            if (that.onError) {
+                that.onError([req.statusText])
+            } else {
+                console.error('update: no ErrorUpdateCallback for onError');
             }
         }
         req.send(body);
