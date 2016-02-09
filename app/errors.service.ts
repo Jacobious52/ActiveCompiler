@@ -30,8 +30,6 @@ export class ErrorsService {
 
                 that.compiling = false;
 
-                console.info('request received');
-
                 if (that.onUpdate) {
                     that.onUpdate(that.errors);
                 } else {

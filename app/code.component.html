@@ -1,19 +1,31 @@
-
-<div class="input-group" style="margin-bottom: 5px;">
-  <span class="input-group-btn">
-    <button type="button" class="btn btn-default" style="margin-top: 15px;" (click)="newFile()">New</button>
-  </span>
-  <span class="input-group-btn">
-    <button type="button" class="btn btn-danger" style="margin-top: 15px; margin-left: 15px;" (click)="deleteFile()">Delete</button>
-  </span>
-  <input type="text" class="form-control" style="margin-top: 15px; margin-left: 15px; width: 95%;" maxlength="48" [(ngModel)]="newFileName" placeholder="new.h"/>
-</div>
-<div *ngIf="selectedFile && files">
-  <ul class="nav nav-tabs">
-    <li *ngFor="#file of files" [class.active]="file === selectedFile" (click)="onSelect(file)">
-      <a href="#">{{file.name}}</a>
-    </li>
-  </ul>
-  <div id="editor" style="height: 350px;"></div>
-  <button type="button" class="btn btn-primary btn-lg" style="margin-top: 15px;" (click)="compile(selectedFile)">Compile!</button>
+<div *ngIf="selectedProblem">
+  <div class="input-group" style="margin-bottom: 5px;">
+    <span class="input-group-addon">
+      <h6>Problems</h6>
+    </span>
+    <span class="input-group-btn">
+      <button class="btn btn-primary" style="margin-right: 15px;" (click)="loadProblems()"><span class="glyphicon glyphicon-refresh"></span></button>
+    </span>
+    <select class="form-control" title="Problems" style="margin-top: 5px;" [(ngModel)]="selectedProblem" (ngModelChange)="updateSelectedProblem()">
+      <option *ngFor="#problem of problems">{{problem}}</option>
+    </select>
+  </div>
+  <div *ngIf="customProblem" class="input-group" style="margin-bottom: 5px;">
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" style="margin-top: 15px;" (click)="newFile()">New</button>
+    </span>
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-danger" style="margin-top: 15px; margin-left: 15px;" (click)="deleteFile()">Delete</button>
+    </span>
+    <input type="text" class="form-control" style="margin-top: 15px; margin-left: 15px; width: 95%;" maxlength="48" [(ngModel)]="newFileName" placeholder="new.h"/>
+  </div>
+  <div *ngIf="selectedFile && files">
+    <ul class="nav nav-tabs">
+      <li *ngFor="#file of files" [class.active]="file === selectedFile" (click)="onSelect(file)">
+        <a href="#">{{file.name}}</a>
+      </li>
+    </ul>
+    <div id="editor" style="height: 350px;"></div>
+    <button type="button" class="btn btn-primary btn-lg" style="margin-top: 15px;" (click)="compile(selectedFile)">Compile!</button>
+  </div>
 </div>

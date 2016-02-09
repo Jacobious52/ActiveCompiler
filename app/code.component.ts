@@ -14,21 +14,46 @@ export class CodeComponent implements OnInit, AfterViewChecked {
     public files: CodeFile[];
     public selectedFile: CodeFile;
 
+    public selectedProblem: string;
+    public customProblem: boolean;
+    public problems : string[];
+
     public newFileName: string;
 
     private _editorLoaded: boolean = false;
 
     constructor(private _codeFileService: CodeFileService, private _errorsService : ErrorsService) { }
 
-    loadFiles() {
-        this._codeFileService.getFiles().then(files => {
-            this.files = files;
-            this.selectedFile = this.files[0];
-        });
+    updateSelectedProblem() {
+        if (this.selectedProblem == "custom") {
+            this.customProblem = true;
+        } else {
+            this.customProblem = false;
+        }
+
+        console.log('selected: ' + this.selectedProblem);
+        this.files = this._codeFileService.getFiles(this.selectedProblem);
+        this.selectedFile = this.files[0];
+
+        if (this._editorLoaded) {
+            this.setCurrentFile(this.selectedFile);
+        }
+    }
+
+    loadProblems() {
+        this._codeFileService.onUpdate = () : void => {
+            this.problems = this._codeFileService.getProblems();
+
+            // set the selected problem to the first one
+            this.selectedProblem = this.problems[0];
+
+            this.updateSelectedProblem();
+        };
+        this._codeFileService.fetchProblems();
     }
 
     ngOnInit() {
-        this.loadFiles();
+        this.loadProblems();
     }
 
     ngAfterViewChecked() {
