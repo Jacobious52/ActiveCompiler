@@ -35,7 +35,6 @@ System.register(['angular2/core'], function(exports_1) {
                             that.errors = resp['errors'];
                             console.log(that.errors);
                             that.compiling = false;
-                            console.info('request received');
                             if (that.onUpdate) {
                                 that.onUpdate(that.errors);
                             }
