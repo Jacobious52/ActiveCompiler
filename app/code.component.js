@@ -28,15 +28,32 @@ System.register(['angular2/core', './codefile.service', './errors.service'], fun
                     this._errorsService = _errorsService;
                     this._editorLoaded = false;
                 }
-                CodeComponent.prototype.loadFiles = function () {
+                CodeComponent.prototype.updateSelectedProblem = function () {
+                    if (this.selectedProblem == "custom") {
+                        this.customProblem = true;
+                    }
+                    else {
+                        this.customProblem = false;
+                    }
+                    console.log('selected: ' + this.selectedProblem);
+                    this.files = this._codeFileService.getFiles(this.selectedProblem);
+                    this.selectedFile = this.files[0];
+                    if (this._editorLoaded) {
+                        this.setCurrentFile(this.selectedFile);
+                    }
+                };
+                CodeComponent.prototype.loadProblems = function () {
                     var _this = this;
-                    this._codeFileService.getFiles().then(function (files) {
-                        _this.files = files;
-                        _this.selectedFile = _this.files[0];
-                    });
+                    this._codeFileService.onUpdate = function () {
+                        _this.problems = _this._codeFileService.getProblems();
+                        // set the selected problem to the first one
+                        _this.selectedProblem = _this.problems[0];
+                        _this.updateSelectedProblem();
+                    };
+                    this._codeFileService.fetchProblems();
                 };
                 CodeComponent.prototype.ngOnInit = function () {
-                    this.loadFiles();
+                    this.loadProblems();
                 };
                 CodeComponent.prototype.ngAfterViewChecked = function () {
                     // nasty 'hack' to load codeeditor after dom rendered
