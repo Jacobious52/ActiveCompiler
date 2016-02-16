@@ -11,9 +11,9 @@ export class ErrorsService {
     public onUpdate: ErrorUpdateCallback;
     public onError: ErrorUpdateCallback;
 
-    fetchErrors(files: CodeFile[]) {
-        var url = 'http://localhost:5000/build/id/a1687803';
-        var body = JSON.stringify({ 'files': files });
+    fetchErrors(files: CodeFile[], id: string, problem: string) {
+        var url = 'http://localhost:5000/build/id/' + id;
+        var body = JSON.stringify({ 'files': files, 'problem': problem });
 
         // js scoping trick. because javascript doesnt preserve 'this' like c++
         var that = this;

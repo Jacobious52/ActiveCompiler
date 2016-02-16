@@ -20,8 +20,8 @@ System.register(['angular2/core'], function(exports_1) {
             CodeFileService = (function () {
                 function CodeFileService() {
                 }
-                CodeFileService.prototype.fetchProblems = function () {
-                    var url = 'http://localhost:5000/problems';
+                CodeFileService.prototype.fetchProblems = function (id) {
+                    var url = 'http://localhost:5000/problems/id/' + id;
                     // js scoping trick. because javascript doesnt preserve 'this' like c++
                     var that = this;
                     var req = new XMLHttpRequest();

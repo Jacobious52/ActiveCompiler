@@ -1,4 +1,4 @@
-System.register(['angular2/core', './codefile.service', './errors.service'], function(exports_1) {
+System.register(['angular2/core', './codefile.service', './errors.service', './user.service'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', './codefile.service', './errors.service'], fun
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, codefile_service_1, errors_service_1;
+    var core_1, codefile_service_1, errors_service_1, user_service_1;
     var CodeComponent;
     return {
         setters:[
@@ -20,16 +20,20 @@ System.register(['angular2/core', './codefile.service', './errors.service'], fun
             },
             function (errors_service_1_1) {
                 errors_service_1 = errors_service_1_1;
+            },
+            function (user_service_1_1) {
+                user_service_1 = user_service_1_1;
             }],
         execute: function() {
             CodeComponent = (function () {
-                function CodeComponent(_codeFileService, _errorsService) {
+                function CodeComponent(_codeFileService, _errorsService, _userService) {
                     this._codeFileService = _codeFileService;
                     this._errorsService = _errorsService;
+                    this._userService = _userService;
                     this._editorLoaded = false;
                 }
                 CodeComponent.prototype.updateSelectedProblem = function () {
-                    if (this.selectedProblem == "custom") {
+                    if (this.selectedProblem == "99. Custom") {
                         this.customProblem = true;
                     }
                     else {
@@ -50,7 +54,7 @@ System.register(['angular2/core', './codefile.service', './errors.service'], fun
                         _this.selectedProblem = _this.problems[0];
                         _this.updateSelectedProblem();
                     };
-                    this._codeFileService.fetchProblems();
+                    this._codeFileService.fetchProblems(this._userService.userID);
                 };
                 CodeComponent.prototype.ngOnInit = function () {
                     this.loadProblems();
@@ -117,14 +121,14 @@ System.register(['angular2/core', './codefile.service', './errors.service'], fun
                 };
                 CodeComponent.prototype.compile = function (file) {
                     this.syncEditorFile();
-                    this._errorsService.fetchErrors(this.files);
+                    this._errorsService.fetchErrors(this.files, this._userService.userID, this.selectedProblem);
                 };
                 CodeComponent = __decorate([
                     core_1.Component({
                         selector: 'code',
                         templateUrl: 'app/code.component.html'
                     }), 
-                    __metadata('design:paramtypes', [codefile_service_1.CodeFileService, errors_service_1.ErrorsService])
+                    __metadata('design:paramtypes', [codefile_service_1.CodeFileService, errors_service_1.ErrorsService, user_service_1.UserService])
                 ], CodeComponent);
                 return CodeComponent;
             })();

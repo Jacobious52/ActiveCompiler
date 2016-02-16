@@ -2,6 +2,7 @@ import {Component, OnInit, AfterViewChecked} from 'angular2/core';
 import {CodeFile} from './codefile'
 import {CodeFileService} from './codefile.service';
 import {ErrorsService} from './errors.service';
+import {UserService} from './user.service';
 
 // Typescript def for js ace editor
 declare var ace: any;
@@ -22,10 +23,12 @@ export class CodeComponent implements OnInit, AfterViewChecked {
 
     private _editorLoaded: boolean = false;
 
-    constructor(private _codeFileService: CodeFileService, private _errorsService : ErrorsService) { }
+    constructor(private _codeFileService: CodeFileService,
+                private _errorsService : ErrorsService,
+                private _userService : UserService) { }
 
     updateSelectedProblem() {
-        if (this.selectedProblem == "custom") {
+        if (this.selectedProblem == "99. Custom") {
             this.customProblem = true;
         } else {
             this.customProblem = false;
@@ -49,7 +52,7 @@ export class CodeComponent implements OnInit, AfterViewChecked {
 
             this.updateSelectedProblem();
         };
-        this._codeFileService.fetchProblems();
+        this._codeFileService.fetchProblems(this._userService.userID);
     }
 
     ngOnInit() {
@@ -132,6 +135,6 @@ export class CodeComponent implements OnInit, AfterViewChecked {
 
     compile(file: CodeFile) {
         this.syncEditorFile();
-        this._errorsService.fetchErrors(this.files);
+        this._errorsService.fetchErrors(this.files, this._userService.userID, this.selectedProblem);
     }
 }

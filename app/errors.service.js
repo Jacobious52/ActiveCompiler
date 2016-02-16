@@ -21,9 +21,9 @@ System.register(['angular2/core'], function(exports_1) {
                 function ErrorsService() {
                     this.compiling = false;
                 }
-                ErrorsService.prototype.fetchErrors = function (files) {
-                    var url = 'http://localhost:5000/build/id/a1687803';
-                    var body = JSON.stringify({ 'files': files });
+                ErrorsService.prototype.fetchErrors = function (files, id, problem) {
+                    var url = 'http://localhost:5000/build/id/' + id;
+                    var body = JSON.stringify({ 'files': files, 'problem': problem });
                     // js scoping trick. because javascript doesnt preserve 'this' like c++
                     var that = this;
                     var req = new XMLHttpRequest();

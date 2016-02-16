@@ -3,12 +3,13 @@ import {CodeComponent} from './code.component';
 import {ErrorsComponent} from './errors.component';
 import {CodeFileService} from './codefile.service';
 import {ErrorsService} from './errors.service';
+import {UserService} from './user.service';
 
 @Component({
     selector: 'app',
     templateUrl: 'app/app.component.html',
     directives: [CodeComponent, ErrorsComponent],
-    providers: [CodeFileService, ErrorsService]
+    providers: [CodeFileService, ErrorsService, UserService]
 })
 export class AppComponent {
   public user : string = '';
@@ -16,8 +17,11 @@ export class AppComponent {
 
   private regex = /a\d{7}/;
 
+  constructor(private _userService : UserService) {}
+
   logout() {
       // log student leaving
+      this._userService.logout();
 
       this.user = '';
       this.validUser = false;
@@ -28,6 +32,9 @@ export class AppComponent {
   checkValid() {
       this.validUser = this.regex.test(this.user)
 
-      // if true student logged in.. log that
+      // if true, correct user id. log to server
+      if (this.validUser) {
+          this._userService.login(this.user);
+      }
   }
 }

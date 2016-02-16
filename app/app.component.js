@@ -1,4 +1,4 @@
-System.register(['angular2/core', './code.component', './errors.component', './codefile.service', './errors.service'], function(exports_1) {
+System.register(['angular2/core', './code.component', './errors.component', './codefile.service', './errors.service', './user.service'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', './code.component', './errors.component', './c
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, code_component_1, errors_component_1, codefile_service_1, errors_service_1;
+    var core_1, code_component_1, errors_component_1, codefile_service_1, errors_service_1, user_service_1;
     var AppComponent;
     return {
         setters:[
@@ -26,32 +26,40 @@ System.register(['angular2/core', './code.component', './errors.component', './c
             },
             function (errors_service_1_1) {
                 errors_service_1 = errors_service_1_1;
+            },
+            function (user_service_1_1) {
+                user_service_1 = user_service_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent() {
+                function AppComponent(_userService) {
+                    this._userService = _userService;
                     this.user = '';
                     this.validUser = false;
                     this.regex = /a\d{7}/;
                 }
                 AppComponent.prototype.logout = function () {
                     // log student leaving
+                    this._userService.logout();
                     this.user = '';
                     this.validUser = false;
                     location.reload();
                 };
                 AppComponent.prototype.checkValid = function () {
                     this.validUser = this.regex.test(this.user);
-                    // if true student logged in.. log that
+                    // if true, correct user id. log to server
+                    if (this.validUser) {
+                        this._userService.login(this.user);
+                    }
                 };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'app',
                         templateUrl: 'app/app.component.html',
                         directives: [code_component_1.CodeComponent, errors_component_1.ErrorsComponent],
-                        providers: [codefile_service_1.CodeFileService, errors_service_1.ErrorsService]
+                        providers: [codefile_service_1.CodeFileService, errors_service_1.ErrorsService, user_service_1.UserService]
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [user_service_1.UserService])
                 ], AppComponent);
                 return AppComponent;
             })();

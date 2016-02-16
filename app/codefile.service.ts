@@ -6,13 +6,13 @@ export interface RequestUpdateCallback { (): void };
 @Injectable()
 export class CodeFileService {
 
-    public problems : [any];
+    public problems : {name:string, files:CodeFile[]}[];
     public loaded: boolean;
 
     public onUpdate : RequestUpdateCallback;
 
-    fetchProblems() {
-        var url = 'http://localhost:5000/problems';
+    fetchProblems(id: string) {
+        var url = 'http://localhost:5000/problems/id/' + id;
 
         // js scoping trick. because javascript doesnt preserve 'this' like c++
         var that = this;
@@ -21,7 +21,7 @@ export class CodeFileService {
         req.open('GET', url, true);
         req.onreadystatechange = function() {
             if (req.readyState == 4 && req.status == 200) {
-                var resp: { string: string[] } = JSON.parse(req.responseText);
+                var resp: { problems: {name:string, files:CodeFile[]}[] } = JSON.parse(req.responseText);
                 that.problems = resp['problems'];
 
                 that.loaded = true;
