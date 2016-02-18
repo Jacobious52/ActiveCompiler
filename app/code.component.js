@@ -1,4 +1,5 @@
 System.register(['angular2/core', './codefile.service', './errors.service', './user.service', './serverpath'], function(exports_1) {
+    "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -144,7 +145,7 @@ System.register(['angular2/core', './codefile.service', './errors.service', './u
                     __metadata('design:paramtypes', [codefile_service_1.CodeFileService, errors_service_1.ErrorsService, user_service_1.UserService])
                 ], CodeComponent);
                 return CodeComponent;
-            })();
+            }());
             exports_1("CodeComponent", CodeComponent);
         }
     }
