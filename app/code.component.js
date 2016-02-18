@@ -1,4 +1,4 @@
-System.register(['angular2/core', './codefile.service', './errors.service', './user.service'], function(exports_1) {
+System.register(['angular2/core', './codefile.service', './errors.service', './user.service', './serverpath'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', './codefile.service', './errors.service', './u
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, codefile_service_1, errors_service_1, user_service_1;
+    var core_1, codefile_service_1, errors_service_1, user_service_1, serverpath_1;
     var CodeComponent;
     return {
         setters:[
@@ -23,6 +23,9 @@ System.register(['angular2/core', './codefile.service', './errors.service', './u
             },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
+            },
+            function (serverpath_1_1) {
+                serverpath_1 = serverpath_1_1;
             }],
         execute: function() {
             CodeComponent = (function () {
@@ -31,6 +34,7 @@ System.register(['angular2/core', './codefile.service', './errors.service', './u
                     this._errorsService = _errorsService;
                     this._userService = _userService;
                     this._editorLoaded = false;
+                    this._loggedQuestionChange = false;
                 }
                 CodeComponent.prototype.updateSelectedProblem = function () {
                     if (this.selectedProblem == "99. Custom") {
@@ -45,6 +49,15 @@ System.register(['angular2/core', './codefile.service', './errors.service', './u
                     if (this._editorLoaded) {
                         this.setCurrentFile(this.selectedFile);
                     }
+                    // this function gets called twice when changing questions
+                    // we only want to log it once
+                    if (this._loggedQuestionChange) {
+                        var url = serverpath_1.SERVER_PATH + 'question/id/' + this._userService.userID + '/q/' + this.selectedProblem;
+                        var req = new XMLHttpRequest();
+                        req.open('GET', url, true);
+                        req.send();
+                    }
+                    this._loggedQuestionChange = !this._loggedQuestionChange;
                 };
                 CodeComponent.prototype.loadProblems = function () {
                     var _this = this;

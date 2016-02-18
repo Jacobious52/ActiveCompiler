@@ -1,4 +1,4 @@
-System.register(['angular2/core'], function(exports_1) {
+System.register(['angular2/core', './serverpath'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,12 +8,15 @@ System.register(['angular2/core'], function(exports_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1;
+    var core_1, serverpath_1;
     var ErrorsService;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
+            },
+            function (serverpath_1_1) {
+                serverpath_1 = serverpath_1_1;
             }],
         execute: function() {
             ;
@@ -22,7 +25,7 @@ System.register(['angular2/core'], function(exports_1) {
                     this.compiling = false;
                 }
                 ErrorsService.prototype.fetchErrors = function (files, id, problem) {
-                    var url = 'http://localhost:5000/build/id/' + id;
+                    var url = serverpath_1.SERVER_PATH + 'build/id/' + id;
                     var body = JSON.stringify({ 'files': files, 'problem': problem });
                     // js scoping trick. because javascript doesnt preserve 'this' like c++
                     var that = this;
@@ -54,6 +57,7 @@ System.register(['angular2/core'], function(exports_1) {
                         }
                     };
                     req.send(body);
+                    // tell the error component that we are compiling
                     this.compiling = true;
                     this.errors = [];
                     if (this.onUpdate) {

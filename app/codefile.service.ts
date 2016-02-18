@@ -1,5 +1,6 @@
 import {CodeFile} from './codefile';
 import {Injectable} from 'angular2/core';
+import {SERVER_PATH} from './serverpath';
 
 export interface RequestUpdateCallback { (): void };
 
@@ -12,7 +13,7 @@ export class CodeFileService {
     public onUpdate : RequestUpdateCallback;
 
     fetchProblems(id: string) {
-        var url = 'http://localhost:5000/problems/id/' + id;
+        var url = SERVER_PATH + 'problems/id/' + id;
 
         // js scoping trick. because javascript doesnt preserve 'this' like c++
         var that = this;

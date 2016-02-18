@@ -1,5 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {CodeFile} from './codefile';
+import {SERVER_PATH} from './serverpath';
 
 export interface ErrorUpdateCallback { (errors: string[]): void };
 
@@ -12,7 +13,7 @@ export class ErrorsService {
     public onError: ErrorUpdateCallback;
 
     fetchErrors(files: CodeFile[], id: string, problem: string) {
-        var url = 'http://localhost:5000/build/id/' + id;
+        var url = SERVER_PATH + 'build/id/' + id;
         var body = JSON.stringify({ 'files': files, 'problem': problem });
 
         // js scoping trick. because javascript doesnt preserve 'this' like c++
@@ -48,6 +49,8 @@ export class ErrorsService {
             }
         }
         req.send(body);
+
+        // tell the error component that we are compiling
         this.compiling = true;
         this.errors = [];
         if (this.onUpdate) {

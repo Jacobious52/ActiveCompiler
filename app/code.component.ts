@@ -3,6 +3,7 @@ import {CodeFile} from './codefile'
 import {CodeFileService} from './codefile.service';
 import {ErrorsService} from './errors.service';
 import {UserService} from './user.service';
+import {SERVER_PATH} from './serverpath';
 
 // Typescript def for js ace editor
 declare var ace: any;
@@ -22,6 +23,7 @@ export class CodeComponent implements OnInit, AfterViewChecked {
     public newFileName: string;
 
     private _editorLoaded: boolean = false;
+    private _loggedQuestionChange : boolean = false;
 
     constructor(private _codeFileService: CodeFileService,
                 private _errorsService : ErrorsService,
@@ -41,6 +43,16 @@ export class CodeComponent implements OnInit, AfterViewChecked {
         if (this._editorLoaded) {
             this.setCurrentFile(this.selectedFile);
         }
+
+        // this function gets called twice when changing questions
+        // we only want to log it once
+        if (this._loggedQuestionChange) {
+            var url = SERVER_PATH + 'question/id/' + this._userService.userID + '/q/' + this.selectedProblem;
+            var req = new XMLHttpRequest();
+            req.open('GET', url, true);
+            req.send();
+        }
+        this._loggedQuestionChange = !this._loggedQuestionChange;
     }
 
     loadProblems() {
