@@ -25,6 +25,8 @@ export class CodeComponent implements OnInit, AfterViewChecked {
     private _editorLoaded: boolean = false;
     private _loggedQuestionChange : boolean = false;
 
+    private regex = /[\w]+.(cpp|h)/
+
     constructor(private _codeFileService: CodeFileService,
                 private _errorsService : ErrorsService,
                 private _userService : UserService) { }
@@ -111,12 +113,19 @@ export class CodeComponent implements OnInit, AfterViewChecked {
     }
 
     newFile() {
+        // string undefined
         if (!this.newFileName) {
             this.newFileName = 'new.h';
         }
 
+        // exists but empty with whitespaces
         if (!this.newFileName.trim()) {
             this.newFileName = 'new.h';
+        }
+
+        // check to see if filename is safe
+        if (!this.regex.test(this.newFileName) || this.newFileName == 'main.cpp') {
+            return
         }
 
         this.files.push({
