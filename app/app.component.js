@@ -34,8 +34,8 @@ System.register(['angular2/core', './code.component', './errors.component', './c
             AppComponent = (function () {
                 function AppComponent(_userService) {
                     this._userService = _userService;
-                    this.user = '';
-                    this.validUser = false;
+                    this.user = 'a1234567';
+                    this.validUser = true;
                     this.regex = /a\d{7}/;
                 }
                 AppComponent.prototype.logout = function () {
