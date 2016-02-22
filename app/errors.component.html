@@ -1,10 +1,11 @@
 <h4 *ngIf="_errorsService.compiling">Compiling..</h4>
 <h4 *ngIf="fatal">Error <-> Server: Try again..</h4>
-<h4><span class="label label-primary">Total Score: 42</span></h4>
+<h4><span class="label label-primary">Total Score: {{score}}</span></h4>
 <hr>
 <div *ngIf="errors">
   <div *ngFor="#error of errors" class="alert alert-danger" role="alert">
-    <h5><span class="label label-default">Seen. Edit Distance: 42</span></h5>
-    <p>{{error}}</p>
+    <h5 *ngIf="error.seen"><span class="label label-default">Seen</span></h5>
+    <h5><span class="label label-default">Edit Distance: {{editDistance}}</span></h5>
+    <p>{{error.body}}</p>
   </div>
 </div>

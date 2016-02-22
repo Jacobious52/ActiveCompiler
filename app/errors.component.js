@@ -22,16 +22,21 @@ System.register(['angular2/core', './errors.service'], function(exports_1) {
             ErrorsComponent = (function () {
                 function ErrorsComponent(_errorsService) {
                     this._errorsService = _errorsService;
+                    this.editDistance = 0;
+                    this.score = 0;
                     this.fatal = false;
                 }
                 ErrorsComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    this._errorsService.onUpdate = function (errors) {
+                    this._errorsService.onUpdate = function (errors, editDistance, scoreModifier) {
                         _this.errors = errors;
+                        _this.editDistance = editDistance;
+                        _this.score += scoreModifier;
                         _this.fatal = false;
                     };
                     this._errorsService.onError = function (errors) {
                         _this.fatal = true;
+                        _this.editDistance = 0;
                     };
                 };
                 ErrorsComponent = __decorate([

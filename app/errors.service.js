@@ -36,10 +36,11 @@ System.register(['angular2/core', './serverpath'], function(exports_1) {
                         if (req.readyState == 4 && req.status == 200) {
                             var resp = JSON.parse(req.responseText);
                             that.errors = resp['errors'];
-                            console.log(that.errors);
+                            that.editDistance = resp['edit_dist'];
+                            that.scoreModifier = resp['score'];
                             that.compiling = false;
                             if (that.onUpdate) {
-                                that.onUpdate(that.errors);
+                                that.onUpdate(that.errors, that.editDistance, that.scoreModifier);
                             }
                             else {
                                 console.error('update: no ErrorUpdateCallback for onUpdate');
@@ -50,7 +51,7 @@ System.register(['angular2/core', './serverpath'], function(exports_1) {
                         that.compiling = false;
                         console.error('something went wrong with request to server :(');
                         if (that.onError) {
-                            that.onError([req.statusText]);
+                            that.onError([{ body: req.responseText, seen: false }], 0, 0);
                         }
                         else {
                             console.error('update: no ErrorUpdateCallback for onError');
@@ -61,7 +62,7 @@ System.register(['angular2/core', './serverpath'], function(exports_1) {
                     this.compiling = true;
                     this.errors = [];
                     if (this.onUpdate) {
-                        this.onUpdate(this.errors);
+                        this.onUpdate(this.errors, 0, 0);
                     }
                     else {
                         console.error('update: ErrorUpdateCallback not bound to ErrorsComponent');

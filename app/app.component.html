@@ -2,7 +2,7 @@
 <div class="page-header" style="margin-left: 30px;">
   <h3>Active Compiler</h3>
   <b *ngIf="!validUser">Please enter your student ID to continue</b>
-  <button *ngIf="validUser" type="button" class="btn btn-default btn-sm" (click)="logout()">Logout</button>
+  <button *ngIf="validUser" type="button" class="btn btn-default btn-sm" (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</button>
   <input [disabled]="validUser" type="text" class="form-control" maxlength="8" [(ngModel)]="user" (keyup)="checkValid()" placeholder="axxxxxx"/>
 </div>
 <div *ngIf="user && validUser" class="container-fluid">

@@ -2,11 +2,19 @@ import {Injectable} from 'angular2/core';
 import {CodeFile} from './codefile';
 import {SERVER_PATH} from './serverpath';
 
-export interface ErrorUpdateCallback { (errors: string[]): void };
+// Format the errors are received from the json response
+export interface Error {
+    body: string,
+    seen: boolean
+}
+
+export interface ErrorUpdateCallback { (errors: Error[], editDistance: number, score: number): void };
 
 @Injectable()
 export class ErrorsService {
-    public errors: string[];
+    public errors: Error[];
+    public editDistance: number;
+    public scoreModifier: number;
     public compiling: boolean = false;
 
     public onUpdate: ErrorUpdateCallback;
@@ -26,13 +34,13 @@ export class ErrorsService {
             if (req.readyState == 4 && req.status == 200) {
                 var resp: { string: string[] } = JSON.parse(req.responseText);
                 that.errors = resp['errors'];
-
-                console.log(that.errors)
+                that.editDistance = resp['edit_dist'];
+                that.scoreModifier = resp['score'];
 
                 that.compiling = false;
 
                 if (that.onUpdate) {
-                    that.onUpdate(that.errors);
+                    that.onUpdate(that.errors, that.editDistance, that.scoreModifier);
                 } else {
                     console.error('update: no ErrorUpdateCallback for onUpdate');
                 }
@@ -43,7 +51,7 @@ export class ErrorsService {
             console.error('something went wrong with request to server :(');
 
             if (that.onError) {
-                that.onError([req.statusText])
+                that.onError([{body:req.responseText, seen: false}], 0, 0);
             } else {
                 console.error('update: no ErrorUpdateCallback for onError');
             }
@@ -54,7 +62,7 @@ export class ErrorsService {
         this.compiling = true;
         this.errors = [];
         if (this.onUpdate) {
-            this.onUpdate(this.errors);
+            this.onUpdate(this.errors, 0, 0);
         } else {
             console.error('update: ErrorUpdateCallback not bound to ErrorsComponent');
         }
