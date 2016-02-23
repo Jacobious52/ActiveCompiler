@@ -12,8 +12,8 @@ import {UserService} from './user.service';
     providers: [CodeFileService, ErrorsService, UserService]
 })
 export class AppComponent {
-  public user : string = 'a1234567';
-  public validUser: boolean = true;
+  public user : string = '';
+  public validUser: boolean = false;
 
   private regex = /a\d{7}/;
 

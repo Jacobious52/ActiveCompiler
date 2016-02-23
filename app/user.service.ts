@@ -3,7 +3,7 @@ import {SERVER_PATH} from './serverpath';
 
 @Injectable()
 export class UserService {
-    public userID: string = 'a1234567';
+    public userID: string = '';
 
     login(id: string) {
         this.userID = id;
