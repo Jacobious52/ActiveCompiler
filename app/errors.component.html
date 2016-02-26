@@ -2,7 +2,7 @@
 <h4 *ngIf="fatal">Error <-> Server: Try again..</h4>
 <h4><span class="label label-primary">Total Score: {{score}}</span></h4>
 <hr>
-<div *ngIf="errors">
+<div *ngIf="errors" style="overflow-y: auto; height: 450px;">
   <div *ngFor="#error of errors" class="alert alert-danger" role="alert">
     <h5 *ngIf="error.seen"><span class="label label-default">Seen</span></h5>
     <h5><span class="label label-default">Edit Distance: {{editDistance}}</span></h5>

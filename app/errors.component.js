@@ -1,4 +1,4 @@
-System.register(['angular2/core', './errors.service', './user.service', './serverpath'], function(exports_1) {
+System.register(['angular2/core', './errors.service', './user.service'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', './errors.service', './user.service', './serve
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, errors_service_1, user_service_1, serverpath_1;
+    var core_1, errors_service_1, user_service_1;
     var ErrorsComponent;
     return {
         setters:[
@@ -20,9 +20,6 @@ System.register(['angular2/core', './errors.service', './user.service', './serve
             },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
-            },
-            function (serverpath_1_1) {
-                serverpath_1 = serverpath_1_1;
             }],
         execute: function() {
             ErrorsComponent = (function () {
@@ -33,38 +30,26 @@ System.register(['angular2/core', './errors.service', './user.service', './serve
                     this.score = 0;
                     this.fatal = false;
                 }
-                // TODO: put this into one of the service classes
-                ErrorsComponent.prototype.loadScore = function () {
-                    var url = serverpath_1.SERVER_PATH + 'user/id/' + this._userService.userID;
-                    // js scoping trick. because javascript doesnt preserve 'this' like c++
-                    var that = this;
-                    var req = new XMLHttpRequest();
-                    req.open('GET', url, true);
-                    req.setRequestHeader('Content-Type', 'application/json');
-                    req.onreadystatechange = function () {
-                        if (req.readyState == 4 && req.status == 200) {
-                            var resp = JSON.parse(req.responseText);
-                            that.score = resp['score'];
-                        }
-                        req.onerror = function () {
-                            console.error('something went wrong with request to server :(');
-                        };
-                    };
-                    req.send();
-                };
                 ErrorsComponent.prototype.ngOnInit = function () {
                     var _this = this;
+                    // callback for errors compiled
                     this._errorsService.onUpdate = function (errors, editDistance, scoreModifier) {
                         _this.errors = errors;
                         _this.editDistance = editDistance;
                         _this.score += scoreModifier;
+                        // update student's global score
+                        _this._userService.score = _this.score;
                         _this.fatal = false;
                     };
+                    // callback for errors compiling failed
                     this._errorsService.onError = function (errors) {
                         _this.fatal = true;
                         _this.editDistance = 0;
                     };
-                    this.loadScore();
+                    // callback for user login with score
+                    this._userService.onLogin = function (score) {
+                        _this.score = score;
+                    };
                 };
                 ErrorsComponent = __decorate([
                     core_1.Component({
